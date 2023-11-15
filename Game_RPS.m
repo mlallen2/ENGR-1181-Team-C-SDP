@@ -1,11 +1,12 @@
 clc
+clc
 clear
 
 rock = 1;
 paper = 2;
-sissors = 3;
+scissors = 3;
 
-while answer == 'yes'
+while true
     Name1 = input('Enter Player1''s name', 's'); 
     Name2 = input('Enter Player2''s name','s'); 
 
@@ -34,10 +35,16 @@ while answer == 'yes'
         msgbox('Tie')
     end
 
-    disp('Do you want to play Again')
-    answer = input('Type yes to continue, no to stop')
+    yes = 0;
+    no = 1;
+
+    disp('Do you want to play Again?')
+    playAgain = input('Type yes to continue, no to stop');
     
-    if answer == 'no'
-        disp('Have a nice day')
+  
+    if strcmpi(playAgain, 'yes')
+        continue;
+    else
+        break;
     end
 end
