@@ -1,5 +1,4 @@
 clc
-clc
 clear
 
 rock = 1;
@@ -27,10 +26,11 @@ while true
 
     result = RPS_Function(Player1_item, Player2_item)
 
+
     if result == 1 
-        msgbox('Player 1 Wins!')
+        msgbox('Player 1 Wins!', Name1)
     elseif result == 2
-        msgbox('Player 2 Wins!')
+        msgbox('Player 2 Wins!', Name2)
     elseif result == 3 
         msgbox('Tie')
     end
@@ -39,12 +39,13 @@ while true
     no = 1;
 
     disp('Do you want to play Again?')
-    playAgain = input('Type yes to continue, no to stop');
+    playAgain = input('Type yes to continue, no to stop','s');
     
   
     if strcmpi(playAgain, 'yes')
         continue;
     else
+        disp('\nbye')
         break;
     end
 end
