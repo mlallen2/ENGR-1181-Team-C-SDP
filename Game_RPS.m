@@ -9,16 +9,18 @@ Paper = 2;
 scissors = 3;
 Scissors = 3;
 
-%Sets inital scene
+%Sets inital game scene using SGE
 rps_scene = simpleGameEngine('RPS_image.png',84,84,6,[72,60,50]);
 
-while true
-drawScene(rps_scene, [7, 7, 7, 7, 7, 7, 7; 8, 8, 8, 8, 8, 8, 8; 8, 4, 8, 8, 8, 5, 8; 8, 8, 8, 6, 8, 8, 8; 8, 8, 8, 8, 8, 8, 8;7, 7, 7, 7, 7, 7, 7])
+while true % starts loop for game to restart
+
+drawScene(rps_scene, [7, 7, 7, 7, 7, 7, 7; 8, 8, 8, 8, 8, 8, 8; 8, 4, 8, 8, 8, 5, 8; 8, 8, 8, 6, 8, 8, 8; 8, 8, 8, 8, 8, 8, 8;7, 7, 7, 7, 7, 7, 7]) % Loads game scene 
 title('Rock Paper Scissors', 'FontSize',30)
 
 pause(1)
 
 % Assigns names to players
+
 txt_instructions = 'Enter Player 1''s name';
 obj1 = text(1750,2300,txt_instructions, 'fontsize',17,'Color','w','HorizontalAlignment', 'center'); 
 
@@ -45,7 +47,7 @@ Player1_item = input('Enter rock, paper, or scissors  ');
 
 delete(obj1);
 
-txt_instructions = [ Name2 , ' type your item: \n rock, paper, or scissors'];
+txt_instructions = [ Name2 , ' type your item: rock, paper, or scissors'];
 obj1 = text(1750,2300,txt_instructions, 'fontsize',14,'Color','w','HorizontalAlignment', 'center');
 
 Player2_item = input('Enter rock, paper, or scissors  ');
@@ -55,7 +57,8 @@ delete(obj1);
 drawScene(rps_scene, [7, 7, 7, 7, 7, 7, 7;8, 8, 8, 8, 8, 8, 8; 8, 4, 8, 8, 8, 5, 8; 8, Player1_item, 8, 6, 8, Player2_item, 8; 8, 8, 8, 8, 8, 8, 8; 7, 7, 7, 7, 7, 7, 7])
 
 % Determines the reults of the game
- result = RPS_Function(Player1_item, Player2_item);
+
+ result = RPS_Function(Player1_item, Player2_item); % Uses RPS function to determine the winner of RPS
 
     if result == 1 
         txt_instructions = [ Name1 , ' you won!!'];
@@ -68,8 +71,9 @@ drawScene(rps_scene, [7, 7, 7, 7, 7, 7, 7;8, 8, 8, 8, 8, 8, 8; 8, 4, 8, 8, 8, 5,
         obj1 = text(1750,2300,txt_instructions, 'fontsize',20,'Color','w','HorizontalAlignment', 'center');
     end
 
-% Asks if they would like to play again   
-pause(2.25);
+% Asks if they would like to play again
+
+pause(2.25); % Displays results for 2.25 seconds
 
 delete(obj1);
 
