@@ -30,10 +30,10 @@ iconBlank = 13;
 
 % Initialize empty 4x4 game board using "iconBlank" sprite indices 
 global board numEmptyTiles
-board = [iconBlank, iconBlank, iconBlank, iconBlank;
+ board = [iconBlank, iconBlank, iconBlank, iconBlank;
          iconBlank, iconBlank, iconBlank, iconBlank;
          iconBlank, iconBlank, iconBlank, iconBlank;
-         iconBlank, iconBlank, iconBlank, iconBlank];
+         iconBlank, iconBlank, iconBlank, iconBlank]; 
 
 % Initial tile count
 numEmptyTiles = 16;
@@ -67,13 +67,12 @@ xlabel('Use w/a/s/d keys to shift tiles', 'FontSize', 14)
 while true
     pause(0.1); % Small delay for tile movement
 
-    key = get(gcf, 'CurrentCharacter'); % Gets the current key press stored in the figure
+    key = getKeyboardInput(game_scene); % Gets the current key press stored in the figure
     if key ~= '0' % Check if a key is pressed
         [board, numEmptyTiles] = processKey(key, board, numEmptyTiles); % Calls the processKey function to handle the key press 
         set(gcf, 'CurrentCharacter', '0'); % Reset the character
        
-           
-            disp(board);  % Display the current state of the board
+      
             drawScene(game_scene, board); % Redraw the game scene
        
     end
@@ -94,7 +93,8 @@ break;
 end
 
 end
-% Define the processKey function
+
+
 % Takes in the key, current board state, and number of empty tiles and
 % returns the newBoard and an updated number of empty tiles
 function [newBoard, updatedNumEmptyTiles] = processKey(key, board, numEmptyTiles)
