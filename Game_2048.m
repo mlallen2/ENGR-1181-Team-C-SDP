@@ -2,16 +2,18 @@ clc
 clear
 close all
 
-
-
+% Setting the figure to "game" so it can be modified later
+game = figure;
 % simpleGameEngine initialization
-game_scene = simpleGameEngine('2048sprite.png', 84, 84, 5, [207, 198, 184]);
 
+game_scene = simpleGameEngine('2048sprite.png', 84, 84, 5, [207, 198, 184]);
 % variables initialized as global to store the sprite index values for each tile number
 % while allowing the sprite indicies to be accessed and modified in any function.
+
 global icon2 icon4 icon8 icon16 icon32 icon64 icon128 icon256 icon512 icon1024 icon2048 iconBlank
 
-% Defining variables relative to the game based on the sprite sheet
+
+% Defining global variables above to the game based on the sprite sheet
 icon2 = 1;
 icon4 = 2;
 icon8 = 3;
@@ -26,9 +28,8 @@ icon2048 = 11;
 iconGameOver = 12;
 iconBlank = 13;
 
-
 % Initialize empty 4x4 game board using "iconBlank" sprite indices 
-global board 
+global board numEmptyTiles
  board = [iconBlank, iconBlank, iconBlank, iconBlank;
          iconBlank, iconBlank, iconBlank, iconBlank;
          iconBlank, iconBlank, iconBlank, iconBlank;
@@ -36,25 +37,28 @@ global board
 
 % Initial tile count
 numEmptyTiles = 16;
-
-
 % "CurrentCharacter" is used to store the last key pressed on the figure
 % and this is setting the CurrentCharacter to 0 indicating that no key has
 % been pressed
-set(figure, 'CurrentCharacter', '0'); % Initialize CurrentCharacter
 
+set(game, 'CurrentCharacter', '0'); % Initialize CurrentCharacter
 % Main game loop
-while (true)
 
+while (true)
 drawScene(game_scene, icon2048) % Drawing the gamescene with the 2048 icon
+
 % Initial messages
 title('Team C''s 2048 GAME', 'FontSize', 20)
 xlabel('PRESS ANYWHERE TO START')
 waitforbuttonpress; 
+board = [iconBlank, iconBlank, iconBlank, iconBlank;  % Start the game with a blank board
+         iconBlank, iconBlank, iconBlank, iconBlank;
+         iconBlank, iconBlank, iconBlank, iconBlank;
+         iconBlank, iconBlank, iconBlank, iconBlank];
 
 board = startGameTiles(board); % Initial tile placement
-
 drawScene(game_scene, board);  
+
 % Update the title and xlabel
 title('Can you get to 2048!?','FontSize', 15)
 xlabel('Use w/a/s/d keys to shift tiles', 'FontSize', 14)
@@ -62,23 +66,28 @@ xlabel('Use w/a/s/d keys to shift tiles', 'FontSize', 14)
 while true
     pause(0.1); % Small delay for tile movement
 
+    key = get(gcf, 'CurrentCharacter'); % Gets the current key press stored in the figure
     key = getKeyboardInput(game_scene); % Gets the current key press stored in the figure
     if key ~= '0' % Check if a key is pressed
         [board, numEmptyTiles] = processKey(key, board, numEmptyTiles); % Calls the processKey function to handle the key press 
         set(gcf, 'CurrentCharacter', '0'); % Reset the character
-       
-      
+
+
+            disp(board);  % Display the current state of the board
             drawScene(game_scene, board); % Redraw the game scene
-       
+
     end
+
 % If there are no more empty tiles and the "isGameOver" condition is true,
 % the game ends and the loop is broken out of
+
     if numEmptyTiles == 0 && isGameOver(board)
         drawScene(game_scene, iconGameOver)
         title('You Lose!','FontSize',20);
         xlabel('y to play again, n to quit','FontSize',14)
         break;
     end
+
 end
 
 playAgain = input('Would you like to play again?', "s")
@@ -88,6 +97,7 @@ break;
 end
 
 end
+% Define the processKey function
 
 
 % Takes in the key, current board state, and number of empty tiles and
@@ -123,6 +133,7 @@ function [newBoard, updatedNumEmptyTiles] = processKey(key, board, numEmptyTiles
             updatedNumEmptyTiles = numEmptyTiles;
             return;
     end
+
       % If the board was changed (valid key press), Call the addNewTile
       % function
     if ~isequal(board, prevBoard)
@@ -137,9 +148,7 @@ end
 % Takes board and direction as inputs and returns an updated board with
 % shifted tiles
 function board = shiftTiles(board , direction)
-
 global iconBlank
-
  
 % If direction is up
 if strcmp(direction, 'up')  
@@ -156,7 +165,6 @@ end
 end
 end
 end
-
 elseif strcmp(direction, 'left')
  for i = 1:size(board,1) % Loop through rows
   for j = 2:size(board,2) % Loop through columns besides leftmost
@@ -171,7 +179,6 @@ end
 end
 end
 end
-
 elseif strcmp(direction, 'down')
  for j = 1:size(board, 2)  % Loop through columns
   for i = size(board, 1)-1:-1:1 % Loop rows besides bottom 
@@ -186,7 +193,6 @@ end
 end
 end
 end
-
 elseif strcmp(direction, 'right')
  for i = 1:size(board,1) % Loop through rows
   for j = size(board,2):-1:1 % Loop through columns besides rightmost
@@ -197,16 +203,17 @@ elseif strcmp(direction, 'right')
     board(i,j) = iconBlank; % Set current tile blank
     j = k; % Update index
     k = k+1; % decrement to check next position
+end
+end
+end
+end
+end
+end
 
-end
-end
-end
-end
-end
-end
 
 % function merges touching tiles in the specified direction
 % Takes board and direction as inputs and outputs an updated board
+
 function board = mergeTiles(board, direction)
 % Global sprite index values so they can be accessed
     global iconBlank icon2 icon4 icon8 icon16 icon32 icon64 icon128 icon256 icon512 icon1024 icon2048
@@ -223,7 +230,6 @@ end
 end
 
 % Same logic as above
-
 elseif strcmp(direction, 'left')
  for i = 1:size(board, 1)
   for j = 1:size(board, 2)-1
@@ -257,6 +263,7 @@ end
 end
 end
 end
+
 
 % function gets the next sprite index after merging tiles
 % takes the current sprite index as an input and returns the next icon
@@ -312,10 +319,12 @@ function [newBoard, updatedNumEmptyTiles] = addNewTile(board)
     updatedNumEmptyTiles = numel(emptyTiles) - 1; % decreases number of empty tiles by 1
 end
 
+
 % Function adds the two initial tiles to start the game
 % takes board and number of tiles as a inputs and returns an updated board
 function board = startGameTiles(board)
     global icon2 iconBlank
+
     % Same logic as addNewTile function
     for i = 1:2 % Loops twice
         emptyTiles = find(board == iconBlank); 
@@ -331,11 +340,11 @@ function gameOver = isGameOver(board)
     gameOver = all(board(:) ~= iconBlank) && ~canMerge(board);
 end
 
+
 % Function checks if any merges are possible
 function canMerge = canMerge(board)
     global iconBlank
     canMerge = false; 
-
     % Check if any touching cells can merge horizontally
 for i = 1:size(board, 1)
  for j = 1:size(board, 2)-1
