@@ -2,8 +2,7 @@ clc
 clear
 close all
 
-% Setting the figure to "fig" so it can be modified later
-fig = figure;
+
 
 % simpleGameEngine initialization
 game_scene = simpleGameEngine('2048sprite.png', 84, 84, 5, [207, 198, 184]);
@@ -29,7 +28,7 @@ iconBlank = 13;
 
 
 % Initialize empty 4x4 game board using "iconBlank" sprite indices 
-global board numEmptyTiles
+global board 
  board = [iconBlank, iconBlank, iconBlank, iconBlank;
          iconBlank, iconBlank, iconBlank, iconBlank;
          iconBlank, iconBlank, iconBlank, iconBlank;
@@ -42,7 +41,7 @@ numEmptyTiles = 16;
 % "CurrentCharacter" is used to store the last key pressed on the figure
 % and this is setting the CurrentCharacter to 0 indicating that no key has
 % been pressed
-set(fig, 'CurrentCharacter', '0'); % Initialize CurrentCharacter
+set(figure, 'CurrentCharacter', '0'); % Initialize CurrentCharacter
 
 % Main game loop
 while (true)
@@ -52,10 +51,6 @@ drawScene(game_scene, icon2048) % Drawing the gamescene with the 2048 icon
 title('Team C''s 2048 GAME', 'FontSize', 20)
 xlabel('PRESS ANYWHERE TO START')
 waitforbuttonpress; 
-board = [iconBlank, iconBlank, iconBlank, iconBlank;  % Start the game with a blank board
-         iconBlank, iconBlank, iconBlank, iconBlank;
-         iconBlank, iconBlank, iconBlank, iconBlank;
-         iconBlank, iconBlank, iconBlank, iconBlank];
 
 board = startGameTiles(board); % Initial tile placement
 
